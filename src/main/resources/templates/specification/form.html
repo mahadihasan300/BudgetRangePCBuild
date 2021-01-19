@@ -1,0 +1,493 @@
+<!--/* Thymeleaf templating engine, Each token will be replaced by their respective titles in the resulting page. */-->
+
+
+
+
+<html>
+<head>
+<title>Budget Range PC Build</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: DarkSalmon;
+   color: white;
+   text-align: center;
+}
+.right {
+  position: absolute;
+  right: 0px;
+  width: 300px;
+  border: 3px solid #73AD21;
+  padding: 10px;
+}
+
+.required:after {
+    content:" *";
+    color: red;
+  }
+
+</style>
+
+</head>
+
+<body style="background-color:powderblue;">
+
+
+
+
+
+
+
+
+<div xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	layout:decorate="~{master-form}">
+
+	<div layout:fragment="breadcrumb">
+		<h1>Budget Range PC Build</h1>
+		<ol class="breadcrumb">
+			<li><a href="#" th:href="@{/}"><i class="fa fa-dashboard"></i>
+					Home</a></li>
+			<li class="active">Budget Range PC Build</li>
+		</ol>
+	</div>
+
+	<!-- <div layout:fragment="panel-header">
+		<div class="form-panel-heading">
+			<div class="row">
+
+				<div th:if="${thana.id != null}"
+					class="col-sm-11 panel-title pt-1 pull-left text-letf">
+					<a sec:authorize="hasRole('ROLE_THANA_VIEW')" href="/thana/list"
+						class="btn btn-primary mr-1"><span class="fa fa-arrow-left"></span></a>
+					Edit Thana Information (<span th:text="${thana.name}"></span>)
+				</div>
+
+				<div th:if="${thana.id == null}"
+					class="col-sm-11 panel-title pt-1 pull-left text-letf">
+					<a sec:authorize="hasRole('ROLE_THANA_VIEW')" href="/thana/list"
+						class="btn btn-primary mr-1"><span class="fa fa-arrow-left"></span></a>
+					Add Thana Information
+				</div>
+
+				<div class="col-sm-1 pull-right text-right">
+					<a sec:authorize="hasRole('ROLE_THANA_VIEW')" href="/thana/list"
+						class="btn btn-primary"><span class="fa fa-times-circle"></span></a>
+				</div>
+			</div>
+
+		</div>
+	</div> -->
+	<div layout:fragment="panel-content"
+		style="margin-left: 45px; margin-right: 45px;">
+		<!-- <div th:include="role/addForm"></div> -->
+		<div class="card border-primary box box-primary">
+
+			<div th:if="${message != null}"
+				class="panel panel-default fade in collapse alert alert-info"
+				style="margin: 10px; padding: 5px;" id="idMessagePanel">
+				<div>
+					<a data-toggle="collapse" href="#idMessagePanel" class="close">&times
+					</a>
+				</div>
+				<div class="panel-body" th:text="${message}"></div>
+			</div>
+
+			<div th:if="${errorMessage != null}"
+				class="panel panel-default fade in collapse alert alert-warning"
+				style="margin: 5px; padding: 5px;" id="idMessagePanel">
+				<div>
+					<a data-toggle="collapse" href="#idMessagePanel" class="close">&times
+					</a>
+				</div>
+				<div class="panel-body" th:text="${errorMessage}"></div>
+			</div>
+
+			<div class="with-border">
+				<div class="">
+					<div class="box-body">
+						<div class="">
+							<!-- add form -->
+							<form role="form" th:action="@{/specification/form}"
+								th:object="${specification}" method="post">
+								<div class="text-right">
+									<div class="btn-group" role="group">
+										<button sec:authorize="hasRole('ROLE_THANA_ADD')"
+											class="btn btn-default" type="submit" name=btnSubmit
+											value="SaveClose" title="Save & Return to List">
+											<i class="fa fa-floppy-o mr-1 text-primary"></i>Save & Close
+										</button>
+										<button sec:authorize="hasRole('ROLE_THANA_ADD')"
+											class="btn btn-default" type="submit" name="btnSubmit"
+											value="SaveNew" title="Save & Reload for New Entry">
+											<i class="fa fa-floppy-o mr-1 text-success"></i>Save & New
+										</button>
+										<a sec:authorize="hasRole('ROLE_THANA_DELETE')"
+											th:if="${specification.id != null}" href="#"
+											class="btn btn-default btn-delete"
+											th:href="@{/specification/delete(id=*{id})}"
+											title="Delete specification"><span
+											class="fa fa-trash mr-1 text-danger"></span> Delete</a>
+									</div>
+								</div>
+								<div class="">
+									<!-- <div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="budget" class="val-required">Budget</label> <select
+													class="selectpicker form-control" data-live-search="true"
+													data-size="10" title="Please Select ..."
+													th:field="*{budget}" required id="budget">
+													<option
+														th:each="budget : ${T(com.mahadi.demo.enumeration.Budget).values()}"
+														th:value="${budget}" th:text="${budget.displayName}">Select
+														budget</option>
+												</select> <label class="control-label error-label"
+													th:errors="*{budget}"> Pesan error nanti di sini </label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="budget" class="val-required">Monitor
+													Requrement</label> <select class="selectpicker form-control"
+													data-live-search="true" data-size="10"
+													title="Please Select ..." th:field="*{monitorRequrement}"
+													required id="monitorRequrement">
+													<option
+														th:each="monitorRequrement : ${T(com.mahadi.demo.enumeration.MonitorRequrement).values()}"
+														th:value="${monitorRequrement}"
+														th:text="${monitorRequrement.displayName}">Select
+														budget</option>
+												</select> <label class="control-label error-label"
+													th:errors="*{monitorRequrement}"> Pesan error nanti
+													di sini </label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="purpose" class="val-required">Purpose</label> <select
+													class="selectpicker form-control" data-live-search="true"
+													data-size="10" title="Please Select ..."
+													th:field="*{purpose}" required id="purpose">
+													<option
+														th:each="purpose : ${T(com.mahadi.demo.enumeration.Purpose).values()}"
+														th:value="${purpose}" th:text="${purpose.displayName}">Select
+														budget</option>
+												</select> <label class="control-label error-label"
+													th:errors="*{purpose}"> Pesan error nanti di sini </label>
+											</div>
+										</div>
+
+									</div> -->
+
+									<div class="">
+										<div class="row">
+
+
+
+											<div class="col-md-4">
+												<div class="">
+													<label for="kode" class="required">Budget</label> <select
+														class="selectpicker form-control" id="cboDistrict"
+														path="cboDistrict" data-live-search="true" data-size="10"
+														title="Please Select ..." th:field="*{budget}" required>
+														<option th:each="p : ${budget}" th:value="${p.id}"
+															th:text="${p.budgetName}">Select Budget</option>
+													</select> <label class="control-label error-label"
+														th:errors="*{budget}"> Pesan error nanti di sini </label>
+												</div>
+											</div>
+
+
+
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="kode" class="required">Monitor
+														Requrement</label> <select class="selectpicker form-control"
+														id="cboDistrict" path="cboDistrict"
+														data-live-search="true" data-size="10"
+														title="Please Select ..." th:field="*{monitorRequrement}"
+														required>
+														<option th:each="p : ${monitorRequrement}"
+															th:value="${p.id}" th:text="${p.monitorRequrementName}">Select
+															Monitor Requrement</option>
+													</select> <label class="control-label error-label"
+														th:errors="*{monitorRequrement}"> Pesan error
+														nanti di sini </label>
+												</div>
+											</div>
+
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="kode" class="required">Purpose</label> <select
+														class="selectpicker form-control" id="cboDistrict"
+														path="cboDistrict" data-live-search="true" data-size="10"
+														title="Please Select ..." th:field="*{purpose}" required>
+														<option th:each="p : ${purpose}" th:value="${p.id}"
+															th:text="${p.purposeName}">Select Purpose</option>
+													</select> <label class="control-label error-label"
+														th:errors="*{purpose}"> Pesan error nanti di sini
+													</label>
+												</div>
+											</div>
+
+
+										</div>
+									</div>
+
+
+									<div class="">
+										<div class="row">
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="cpu" class="required">Processor</label> <input
+														type="text" th:field="*{cpu}" name="cpu"
+														class="form-control" id="cpu" placeholder="Processor Name"
+														required /> <label class="control-label error-label"
+														th:if="${#fields.hasErrors('cpu')}" th:errors="*{cpu}">
+														Pesan error nanti di sini </label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="cpuCooler">Cpu Cooler</label> <input
+														type="text" th:field="*{cpuCooler}" name="cpuCooler"
+														class="form-control" id="cpuCooler"
+														placeholder="Cpu Cooler Name" /> <label
+														class="control-label error-label"
+														th:if="${#fields.hasErrors('cpuCooler')}"
+														th:errors="*{cpuCooler}"> Pesan error nanti di
+														sini </label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
+													<label for="motherBoard" class="required">Mother Board</label> <input
+														type="text" th:field="*{motherBoard}" required
+														name="motherBoard" class="form-control" id="motherBoard"
+														placeholder="Mother Board Name" /> <label
+														class="control-label error-label"
+														th:if="${#fields.hasErrors('motherBoard')}"
+														th:errors="*{motherBoard}"> Pesan error nanti di
+														sini </label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="ram" class="required">Ram</label> <input
+													type="text" th:field="*{ram}" required name="ram"
+													class="form-control" id="ram" placeholder="Ram Model" /> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('ram')}" th:errors="*{ram}">
+													Pesan error nanti di sini </label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="ssd">SSD</label> <input type="text"
+													th:field="*{ssd}" name="ssd" class="form-control" id="ssd"
+													placeholder="SSD Name" /> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('ssd')}" th:errors="*{ssd}">
+													Pesan error nanti di sini </label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="hdd">HDD</label> <input type="text"
+													th:field="*{hdd}" required name="hdd" class="form-control"
+													id="hdd" placeholder="HDD Model Name" /> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('hdd')}" th:errors="*{hdd}">
+													Pesan error nanti di sini </label>
+											</div>
+										</div>
+									</div>
+
+
+									<div class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="gpu">GPU</label> <input
+													type="text" th:field="*{gpu}"  name="gpu"
+													class="form-control" id="gpu" placeholder="GPU Model" /> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('gpu')}" th:errors="*{gpu}">
+													Pesan error nanti di sini </label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="psu">PSU</label> <input
+													type="text" th:field="*{psu}" required name="psu"
+													class="form-control" id="psu"
+													placeholder="Power Supply Unit" /> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('psu')}" th:errors="*{psu}">
+													Pesan error nanti di sini </label>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="casing" class="required">Casing</label> <input
+													type="text" th:field="*{casing}" required name="casing"
+													class="form-control" id="casing" placeholder="Casing Model" />
+												<label class="control-label error-label"
+													th:if="${#fields.hasErrors('casing')}"
+													th:errors="*{casing}"> Pesan error nanti di sini </label>
+											</div>
+										</div>
+									</div>
+
+
+									<div class="row">
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="monitor">Monitor</label> <input
+													type="text" th:field="*{monitor}"  name="monitor"
+													class="form-control" id="monitor"
+													placeholder="Monitor Model" /> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('monitor')}"
+													th:errors="*{monitor}"> Pesan error nanti di sini </label>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="keyboard">Keyboard</label>
+												<input type="text" th:field="*{keyboard}" 
+													name="keyboard" class="form-control" id="keyboard"
+													placeholder="Keyboard Model" /> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('keyboard')}"
+													th:errors="*{keyboard}"> Pesan error nanti di sini
+												</label>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="mouse">Mouse</label> <input
+													type="text"  th:field="*{mouse}" name="mouse"
+													class="form-control" id="mouse" placeholder="Mouse Model" />
+												<label class="control-label error-label"
+													th:if="${#fields.hasErrors('mouse')}" th:errors="*{mouse}">
+													Pesan error nanti di sini </label>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label for="ups">UPS</label> <input
+													type="text" th:field="*{ups}"  name="ups"
+													class="form-control" id="ups" placeholder="UPS Model" /> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('ups')}" th:errors="*{ups}">
+													Pesan error nanti di sini </label>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="aproximateCost">Aproximate
+													Cost</label> <input type="text" th:field="*{aproximateCost}"
+													 name="aproximateCost" class="form-control"
+													id="aproximateCost" placeholder="Aproximate Cost" /> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('aproximateCost')}"
+													th:errors="*{aproximateCost}"> Pesan error nanti di
+													sini </label>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="credit" >Suggested
+													By </label> <input type="text" th:field="*{credit}"
+													name="credit" class="form-control" id="credit"
+													placeholder="Suggested By" required/> <label
+													class="control-label error-label"
+													th:if="${#fields.hasErrors('credit')}"
+													th:errors="*{credit}"> Pesan error nanti di sini </label>
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="remarks">Remarks </label>
+										<textarea th:field="*{remarks}"  name="credit"
+											class="form-control" id="remarks" placeholder="Remarks" />
+										<label class="control-label error-label"
+											th:if="${#fields.hasErrors('remarks')}"
+											th:errors="*{remarks}"> Pesan error nanti di sini </label>
+										</textarea>
+									</div>
+									<div class="col-sm-4">
+											<div class="form-group">
+												<label for="isVerified">Is Active ? </label>
+												<div>
+													<input type="checkbox" th:field="*{isActive}"
+														th:name="isActive" th:id="isActive" />
+												</div>
+											</div>
+										</div>
+
+
+
+
+
+
+
+								</div>
+								<!-- /.box-body -->
+
+							</form>
+
+						</div>
+					</div>
+				</div>
+				<!-- #Modal for removing -->
+				<div th:include="deleteModal/del_modal"></div>
+			</div>
+		</div>
+	</div>
+	<th:block layout:fragment="styles">
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+			crossorigin="anonymous">
+
+
+	</th:block>
+
+	<th:block layout:fragment="script">
+		<script type="text/javascript">
+			$(document)
+					.ready(
+							function() {
+								setTimeout(
+										function() {
+											document
+													.getElementById('idMessagePanel').style.display = 'none';
+										}, 5000);
+
+							});
+		</script>
+	</th:block>
+
+</div>
+
+
+
+
+</body>
+</html>

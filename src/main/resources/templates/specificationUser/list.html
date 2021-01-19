@@ -1,0 +1,179 @@
+<!--/* Thymeleaf templating engine, Each token will be replaced by their respective titles in the resulting page. */-->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	layout:decorate="~{layout-newconnection}">
+<head>
+<title>List of Budget Range PC Build User</title>
+</head>
+<body>
+	<div layout:fragment="breadcrumb">
+		<h1 style="text-align:center">Budget Range PC Build List</h1>
+		<ol class="breadcrumb">
+			<li><a href="#" th:href="@{/specificationUser/user-form}"><i
+					class="fa fa-dashboard"></i> Home</a></li>
+			<li class="active">Budget Range PC Build List</li>
+		</ol>
+	</div>
+	<div layout:fragment="content">
+
+		<div class="box box-primary">
+			<div class="box-body">
+				<div th:if="${message != null}"
+					class="panel panel-default fade in collapse alert alert-info"
+					style="padding: 5px;" id="idMessagePanel">
+					<div>
+						<a data-toggle="collapse" href="#idMessagePanel" class="close">&times
+						</a>
+					</div>
+					<div class="panel-body" th:text="${message}"></div>
+				</div>
+
+				<div class="table-responsive">
+
+					<div class="text-right">
+						<div class="button2 button4" role="group">
+
+							<a sec:authorize="hasRole('ROLE_THANA_DELETE')" href="#"
+								th:href="@{/specificationUser/user-form}" title="Back to Search"><span></span>
+								Search Again</a>
+						</div>
+					</div>
+
+					<table data-toolbar="#toolbar" border="1"
+						class="table table-striped table-responsive-md"
+						data-toggle="table" data-pagination-v-align="both"
+						data-show-columns="true" id="exportTable" data-resizable="true"
+						data-show-export="true" data-click-to-select="true">
+						<thead>
+							<tr class="bg-secondary">
+								<th class="text-center"><a class="fa fa-fw fa-sort"><a
+										class="sorted" sd:pagination-sort="cpu">CPU</th>
+								<th class="text-center"><a class="fa fa-fw fa-sort"><a
+										class="sorted" sd:pagination-sort="cpu">MotherBoard</th>
+								<th class="text-center"><a class="fa fa-fw fa-sort"><a
+										class="sorted" sd:pagination-sort="ram">Ram</th>
+								<th class="text-center"><a class="fa fa-fw fa-sort"><a
+										class="sorted" sd:pagination-sort="ram">Credit</th>
+								<th class="text-center"><a class="fa fa-fw fa-sort"><a
+										class="sorted" sd:pagination-sort="ram">Updated At</th>
+								<th class="table-action-header">Actions</th>
+							</tr>
+						</thead>
+						<tbody id="myTable">
+							<tr th:each="st,iter : ${specification}">
+
+
+								<td class="text-center" th:text="${st.cpu}">CPU</td>
+								<td class="text-center" th:text="${st.motherBoard}">MotherBoard</td>
+								<td class="text-center" th:text="${st.ram}">Ram</td>
+								<td class="text-center" th:text="${st.credit}">Credit</td>
+								<td class="text-center" th:text="${st.updatedAt}">Updated
+									At</td>
+								<td><a sec:authorize="hasRole('ROLE_AUTO_PHASE_EDIT')"
+									href="#" class="button button4"
+									th:href="@{/specificationUser/view(id=${st.id})}"
+									title="View full specs"><span></span> Click Here
+										to view full specification</a></td>
+							<!-- </tr>
+							  <tr th:if="${#lists.isEmpty(specification.content)}">
+								<td colspan="13" class="text-center">No data available</td>
+							</tr>  -->
+						</tbody>
+
+					</table>
+				</div>
+			</div>
+
+			<!-- <div class="grid-pagination" th:if="${not #lists.isEmpty(specification.content)}">
+				<div class="row">
+					<div class="col-md-3">
+						Show <span sd:page-size-selector="javascript"></span> entries
+					</div>
+					<div class="col-md-6">
+						<div class="text-center">
+							<nav>
+								<ul class="pagination" sd:pagination="full">
+									Pagination created by SpringDataDialect, this content is just for mockup
+									<li class="disabled"><a href="#" aria-label="Previous"><span
+											aria-hidden="true">&laquo;</span></a></li>
+									<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+					<div class="col-md-3 pull-right text-right">
+						<div sd:pagination-summary=""></div>
+					</div>
+				</div>
+			</div>
+ -->
+		</div>
+
+		<!-- #Modal for removing -->
+		<div th:include="deleteModal/del_modal"></div>
+
+	</div>
+	<th:block layout:fragment="styles">
+		<link rel="stylesheet"
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+			crossorigin="anonymous">
+		<style>
+.button {
+	background-color: #4CAF50;
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+}
+
+.button2 {
+	background-color: black;
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+}
+
+.button4 {
+	border-radius: 12px;
+}
+</style>
+	</th:block>
+	<th:block layout:fragment="script">
+		<script>
+			$(document).ready(function() {
+				setTimeout(function() {
+					var msgPanel = document.getElementById('idMessagePanel');
+					if (msgPanel != null) {
+						msgPanel.style.display = 'none';
+					}
+				}, 5000);
+			});
+
+			$("#idSearch").on(
+					"keyup",
+					function() {
+						var value = $(this).val().toLowerCase();
+						$("#myTable tr").filter(
+								function() {
+									$(this).toggle(
+											$(this).text().toLowerCase()
+													.indexOf(value) > -1)
+								});
+					});
+		</script>
+	</th:block>
+</body>
+</html>
